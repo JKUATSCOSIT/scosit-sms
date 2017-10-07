@@ -1,4 +1,4 @@
-## SCOSIT SMS
+## SCOSIT SMS [![Build Status](https://travis-ci.org/Piusdan/scosit-sms.svg?branch=dev)](https://travis-ci.org/Piusdan/scosit-sms)
 # Automates Redudant Task of sending sms to various people
 
 # Redis
