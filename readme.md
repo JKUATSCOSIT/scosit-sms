@@ -5,7 +5,7 @@
 To persist our tasks and Data structures
 
 # Celery
-Cause Async rocks 
+Doesn't Async rocks 
 
 # AfricasTalking Gateway
 Cause perfomance matters
