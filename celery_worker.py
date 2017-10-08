@@ -2,7 +2,7 @@
 
 import os
 
-from app import create_app
+from app import create_app, celery
 
 app = create_app(os.environ.get("APP_CONFIG", "default"))
 
