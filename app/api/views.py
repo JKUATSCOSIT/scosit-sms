@@ -6,5 +6,5 @@ from . import api
 
 @api.route('/')
 def index():
-    response = jsonify(message="app is running")
+    response = jsonify(body="App is working!")
     return response, 200

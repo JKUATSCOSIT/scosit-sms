@@ -9,6 +9,10 @@ import os
 class Config(object):
     """Base configuration class
     """
+    DEBUG = False
+    TESTING = False
+    SECRET_KEY = "I\xf9\x9cF\x1e\x04\xe6\xfaF\x8f\xe6)-\xa432"
+    CSRF_ENABLED = True
     REDIS_URL = "redis://:{password}@{host}:{port}/{db}".format(
         password=os.getenv("REDIS_PASSWORD", "password"),
         host=os.environ.get("REDIS_HOST", "localhost"),
@@ -33,13 +37,14 @@ class Config(object):
 class DevelopmentConfig(Config):
     """Development Mode configuration
     """
-    Debug = True
-
+    DEBUG = True
+    CSRF_ENABLED = False
 
 class TestingConfig(Config):
     """Testing mode configuration
     """
-    Testing = True
+    TESTING = True
+    CSRF_ENABLED = False
 
 
 class ProductionConfig(Config):

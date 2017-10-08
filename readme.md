@@ -11,8 +11,8 @@ Doesn't Async rocks
 Cause perfomance matters
 
 ## To Do
-* Add Tests
-* CI and CD
-* Package into a flask app
-* Add a documentation
-* celery tasks
+* Add Tests - In Progress
+* CI and CD  - Done
+* Package into a flask app - Done
+* Add a documentation - Done
+* celery tasks  - Done
