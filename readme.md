@@ -11,8 +11,4 @@ Doesn't Async rocks
 Cause perfomance matters
 
 ## To Do
-* Add Tests - In Progress
-* CI and CD  - Done
-* Package into a flask app - Done
-* Add a documentation - Done
-* celery tasks  - Done
+* Convert the sms script `app.py` to a flask application
