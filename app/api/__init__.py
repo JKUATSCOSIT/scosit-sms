@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-api = Blueprint(name='api')
+api = Blueprint('api', __name__)
 
 from . import views, errors
