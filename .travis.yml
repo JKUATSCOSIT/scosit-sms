@@ -17,9 +17,8 @@ install:
 
 script:
     - pytest  # run tests
-    # TODO start celery worker
-    - gunicorn manage:app  # TODO use shell script for this
-
+#    # TODO start celery worker
+#    - gunicorn manage:app  # TODO use shell script for this
 # blacklist
 branches:
   except:
