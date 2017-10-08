@@ -6,14 +6,13 @@ python:
 before_install:
   - echo "START"
   # install dependencies
-  - pip install -r requirements.txt
 
 before_script:
 #  - chmod +x start.sh
 #  - chmod +x run_worker.sh
 
 install:
-    - gunicorn manage:app
+  - pip install -r requirements.txt
 
 script:
     - pytest  # run tests
