@@ -9,7 +9,8 @@ from apiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
-from africastalking.AfricasTalkingGateway import AfricasTalkingGateway, AfricasTalkingGatewayException
+
+from tasks import send_message
 
 try:
     import argparse
@@ -67,8 +68,9 @@ def get_email_and_phone():
     service = discovery.build('sheets', 'v4', http=http,
                               discoveryServiceUrl=discoveryUrl)
 
-    spreadsheetId = 'spreadsheet id'
-    rangeName = 'form query'
+    spreadsheetId = '{spreadsheetid}'.format(
+        spreadsheetid="17A7ECLrpgraIgGo6VMIay8yva52SamvoyoIDwQ6Bgfo")
+    rangeName = '{formquery}'.format(formquery="responses!B2:D154")
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
 
@@ -87,16 +89,6 @@ def get_email_and_phone():
             yield row[0], phone_number
 
 
-def gateway():
-    AT_APIKEY = "your api key"
-    AT_USERNAME = "you username"
-    environment = None    # change this to 1 for testing
-    if environment is None:
-        gateway = AfricasTalkingGateway(apiKey=AT_APIKEY, username=AT_USERNAME)
-    else:
-        gateway = AfricasTalkingGateway(apiKey=AT_APIKEY, username="sandbox", environment="sandbox")
-    return gateway
-
 
 def main():
     """Creates a db instance and saves data to disk
@@ -113,31 +105,11 @@ def main():
     # except Exception as exc:
     #     pass
 
-    print("Getting values from spreadsheet")
-    sms_gateway = gateway()
-    message = "Dear {name}" \
-              "\nThank you for expressing interest in attending today's SCOSIT meeting hosted by BRAVE ventures\n" \
-              "Please come with your laptop and be seated by 7:00PM.\n" \
-              "The venue for the meeting is HALL 7 ROOM 32\n" \
-              "Kind regards,\n" \
-              "Pius Dan - SCOSIT"
+    # print("Getting values from spreadsheet")
+    # send_message.apply_async(args=[dict(name="Pius Dan",phone_number="+254703554404")])
+    
     for name, phone_number in get_email_and_phone():
-        try:
-            print("sending sms to {name}".format(name=name))
-            sms_gateway.sendMessage(to_=[phone_number], message_=message.format(name=name))
-            print ("message sent")
-        except AfricasTalkingGatewayException as exc:
-            print ("Failed to send an sms to {name} with error {error}".format(name=name, error=exc.__str__()))
-
-    #     c.execute('INSERT INTO users VALUES (?,?)', [name, phone_number])
-    # print("Storing to db")
-    # conn.commit()
-    # print("Values stored")
-
-
-    # print("closing db connection")
-    # conn.close()
-    # print("connection closed")
+        send_message.apply_async(args=[dict(name=name,phone_number=phone_number)])
 
 if __name__ == '__main__':
     main()
