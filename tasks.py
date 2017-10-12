@@ -1,23 +1,11 @@
+from africastalking.AfricasTalkingGateway import AfricasTalkingGatewayException
 from celery import Celery
-from africastalking.AfricasTalkingGateway import AfricasTalkingGateway, AfricasTalkingGatewayException
 
-app = Celery('tasks', broker='pyamqp://guest@localhost//')
+from utils import gateway
 
+celery = Celery('tasks', broker='pyamqp://guest@localhost//')
 
-def gateway():
-    AT_APIKEY = "{AfricasTalkingApiKey}".format(
-        AfricasTalkingApiKey="67f406eb5c1eb5642a6ee5acef6120363c7c4c12a8dad2745e9caf24e6119af3")
-    AT_USERNAME = "{AfricasTalkingUsername}".format(
-        AfricasTalkingUsername="darklotus")
-    environment = None    # change this to 1 for testing
-    if environment is None:
-        gateway = AfricasTalkingGateway(apiKey=AT_APIKEY, username=AT_USERNAME)
-    else:
-        gateway = AfricasTalkingGateway(
-            apiKey=AT_APIKEY, username="sandbox", environment="sandbox")
-    return gateway
-
-@app.task(bind=True)
+@celery.task(bind=True)
 def send_message(self, payload):
     name = payload.get("name")
     phone_number = payload.get("phone_number")

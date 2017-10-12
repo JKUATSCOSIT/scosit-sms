@@ -11,6 +11,7 @@ from oauth2client import tools
 from oauth2client.file import Storage
 
 from tasks import send_message
+from config import Config
 
 try:
     import argparse
@@ -39,7 +40,7 @@ def get_credentials():
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)
     credential_path = os.path.join(credential_dir,
-                                   'sheets.googleapis.com-python-quickstart.json')
+                                   'sheets.googleapis.com-scosit-sms.json')
 
     store = Storage(credential_path)
     credentials = store.get()
@@ -69,8 +70,8 @@ def get_email_and_phone():
                               discoveryServiceUrl=discoveryUrl)
 
     spreadsheetId = '{spreadsheetid}'.format(
-        spreadsheetid="17A7ECLrpgraIgGo6VMIay8yva52SamvoyoIDwQ6Bgfo")
-    rangeName = '{formquery}'.format(formquery="responses!B2:D154")
+        spreadsheetid=Config.SHEET_ID)
+    rangeName = Config.QUERY
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
 
@@ -93,23 +94,12 @@ def get_email_and_phone():
 def main():
     """Creates a db instance and saves data to disk
     """
-    # create an in memory db connection instance
-    # conn = sqlite3.connect(':memory:')
-    # c = conn.cursor()
-
-    # create a db table
-    # print("Creating table")
-    # try:
-    #     c.execute('''CREATE TABLE   users(name text, phone_number text)''')
-    #     print("Table created")
-    # except Exception as exc:
-    #     pass
-
-    # print("Getting values from spreadsheet")
-    # send_message.apply_async(args=[dict(name="Pius Dan",phone_number="+254703554404")])
-    
+    count = 0
     for name, phone_number in get_email_and_phone():
+        count += 1
+        print("Sending message to {name}".format(name=name))
         send_message.apply_async(args=[dict(name=name,phone_number=phone_number)])
+    print("Done. Sent {count} Messages".format(count))
 
 if __name__ == '__main__':
     main()
